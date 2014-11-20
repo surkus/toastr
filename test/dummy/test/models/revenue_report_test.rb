@@ -14,6 +14,13 @@ class RevenueReportTest < ActiveSupport::TestCase
     assert RevenueReport.count == 2
 
   end
+  
+  test 'report key based lookups' do
+    r1 = RevenueReport.fetch({special_opts: :all})
+    r2 = RevenueReport.fetch({special_opts: :all})
+    assert r1.id == r2.id
+
+  end
 
   test 'new reports return error hash' do
     report = RevenueReport.fetch({ random: rand() })

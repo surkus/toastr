@@ -1,7 +1,7 @@
 class Report < ActiveRecord::Base
   augment Toastr::Cachable
 
-  serialize :options, Hash
+  serialize :key, Hash
 
   class << self
     def fetch(opts = {})
