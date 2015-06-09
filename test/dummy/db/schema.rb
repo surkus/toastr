@@ -11,30 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141023001455) do
+ActiveRecord::Schema.define(version: 20150609182601) do
 
-  create_table "delayed_jobs", force: true do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "oats", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
-
-  create_table "reports", force: true do |t|
-    t.string   "type",        null: false
-    t.string   "key"
-    t.string   "cache_state"
-    t.text     "cache_json"
-    t.datetime "cached_at"
+  create_table "toastr_toasts", force: :cascade do |t|
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.string   "category"
+    t.jsonb    "cache_json"
+    t.text     "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
