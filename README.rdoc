@@ -1,7 +1,13 @@
 = Toastr
 
+== INSTALLATION
+
 == TODO
-* Adopt ActiveJob support instead of DJ
+* Basic test coverage
+* Generator for migration
 * How to resolve conflicts between job_state and cache_state when errors occur
+
+== CHANGELOG
+* Adopt ActiveJob support instead of DJ
 
 This project rocks and uses MIT-LICENSE.

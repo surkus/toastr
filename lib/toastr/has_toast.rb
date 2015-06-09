@@ -1,45 +1,38 @@
 module Toastr
   module HasToast
-
     extend ActiveSupport::Concern
 
-    included do
+    module ClassMethods
+      def has_toast(category, options = {})
+        has_many :toasts, class_name: Toastr::Toast, as: :parent, dependent: :destroy
 
-    end
+        begin
+          alias_method "#{category}_for_toastr", category
+        rescue
+          raise ArgumentError.new "#{category} must be a defined instance method"
+        end
 
-    module ClassMethods
-      def has_toast(category, options = {})
-        puts 'successfully added toast'
-      # begin
-      #   alias_method "#{category}_for_toastr", category
-      # rescue
-      #   raise "must define #{category} to be toasted"
-      # end
+        define_method category do
+          raise 'Gotta persist activerecord first' unless self.persisted?
+          toast = self.toasts.where(category: category).first_or_create
 
-  #     Object.const_set("#{self.class.name}#{category.capitalize}ToastrActiveJob", Class.new do
-  #       def perform(*args)
-  #         toast.blob_json = self.send("#{category}_for_toastr")
-  #       end
-  #     end
-  #     )
+          case toast.status.to_sym
+          when :cached
+            Toastr.queue_if_stale!(self, toast, options)
+            toast.cache_json
+          when :empty
+            toast.queue!
+            options[:empty_cache_json] || { error: 'Data not yet available' }
+          when :queued
+            toast.cache_json.present? ? toast.cache_json : (options[:empty_cache_json] || { error: 'Data not yet available' })
+          end
+        end
 
-  #     define_method category do
-  #       raise 'Gotta persist' unless self.persisted?
-  #       toast = ::Toastr::Toast.find_by parent: self, category: category
-  #       if toast.present?
-  #         toast.as_json
-  # # trigger logic. compare self.updated_at to toast.updated_at
-  # # if :expires option
-  #   # compare Time.now to toast.updated_at + param value
-  # # if :expire_if
-  #   # yield somewhere
-  #       else
-  #         new_toast = ::Toastr::Toast.create!(parent: self, category: category)
-  # # empty toast message
-  #       end
-  #     end
+      end # has_toast
 
-      end
-    end
+    end # ClassMethods
+
   end
 end
+
+ActiveRecord::Base.send :include, Toastr::HasToast
