@@ -8,6 +8,6 @@ class CreateToasts < ActiveRecord::Migration
       t.timestamps null: true
     end
 
-    add_index :toastr_toasts, [:parent_id, :parent_type, :category], name: 'toasts_parent_category'
+    add_index :toastr_toasts, [:parent_id, :parent_type, :category], unique: true, name: 'toasts_parent_category'
   end
 end
