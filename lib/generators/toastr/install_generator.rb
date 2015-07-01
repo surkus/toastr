@@ -2,9 +2,8 @@ require 'generators/toastr/next_migration_version'
 require 'rails/generators/migration'
 require 'rails/generators/active_record'
 
-# Extend the DelayedJobGenerator so that it creates an AR migration
 module Toastr
-  class ActiveRecordGenerator < Rails::Generators::Base
+  class InstallGenerator < Rails::Generators::Base
     include Rails::Generators::Migration
     extend NextMigrationVersion
 
