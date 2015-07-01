@@ -1,7 +1,0 @@
-= Toastr
-
-== TODO
-* Adopt ActiveJob support instead of DJ
-* How to resolve conflicts between job_state and cache_state when errors occur
-
-This project rocks and uses MIT-LICENSE.
