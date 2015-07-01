@@ -22,46 +22,6 @@ rails generate toastr:install
 rake db:migrate
 ```
 
-## REPORTS
-
-Generate a STI base class Toastr::Report that uses toastr
-
-1. Run the generator
-
-```console
-rails generate toastr:reports
-      create  db/migrate/20150701004451_create_toastr_reports.rb
-      create  app/models/toastr/report.rb
-```
-
-2. Migrate your database
-
-```console
-rake db:migrate
-```
-
-3. Define your own class and its ```#build!``` method
-
-```ruby
-class MyReport < Toastr::Report
-  def build!
-    sleep 5
-    # :key parameter should be a hash of arguments to be used in query
-    self.key.stringify_keys
-  end
-  has_toast :build!
-end
-```
-
-4. Create a report with a :key parameter and call #build!
-
-```console
-2.1.5 :001 > r = MyReport.create(key: {month: 'January', verbose: true})
- => #<MyReport id: 2, type: "MyReport", key: {:month=>"January", :verbose=>true}, created_at: "2015-07-01 00:56:16", updated_at: "2015-07-01 00:56:16">
-2.1.5 :002 > r.build! # blocks and runs for 5 seconds if Rails.application.config.active_job.queue_adapter == :inline
- => "{\"month\"=>\"January\", \"verbose\"=>true, :toastr=>{:elapsed=>5.007665, :cached_at=>2015-06-30 18:07:42 -0700}}"
-```
-
 ## USAGE
 
 1. Define an instance method on an ActiveRecord.
@@ -109,6 +69,47 @@ end
 => {:error=>"Data not yet available"}
 2.1.5 :003 > @oat.breakfast # after waiting enough time for the toast to calculate
 => {"oat"=>"meal", "toastr"=>{"elapsed"=>2.010508, "cached_at"=>"2015-06-09T16:14:25.701-07:00"}}
+```
+
+## REPORTS
+
+Generate a STI base class Toastr::Report that uses toastr
+
+1. Run the generator
+
+```console
+rails generate toastr:reports
+      create  db/migrate/20150701004451_create_toastr_reports.rb
+      create  app/models/toastr/report.rb
+```
+
+2. Migrate your database
+
+```console
+rake db:migrate
+```
+
+3. Define your own class and its ```#build!``` method
+
+```ruby
+class MyReport < Toastr::Report
+  def build!
+    sleep 5
+    # :key parameter should be a hash of arguments to be used in query
+    self.key.stringify_keys
+  end
+  has_toast :build!
+end
+```
+
+4. Create a report with a :key parameter and call #build!
+
+```console
+2.1.5 :001 > r = MyReport.create(key: {month: 'January', verbose: true})
+ => #<MyReport id: 2, type: "MyReport", key: {:month=>"January", :verbose=>true}, created_at: "2015-07-01 00:56:16", updated_at: "2015-07-01 00:56:16">
+
+2.1.5 :002 > r.build! # blocks and runs for 5 seconds if Rails.application.config.active_job.queue_adapter == :inline
+ => "{\"month\"=>\"January\", \"verbose\"=>true, :toastr=>{:elapsed=>5.007665, :cached_at=>2015-06-30 18:07:42 -0700}}"
 ```
 
 ## TODO
