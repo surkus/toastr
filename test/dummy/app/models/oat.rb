@@ -1,10 +1,5 @@
 class Oat < ActiveRecord::Base
 
-  def check_if_stale_toast
-    # self.toast.map{ |toast| toast.refresh! if toast.stale? }
-    # end
-  end
-
   def breakfast
     sleep 2 unless Rails.env.test?
     {oat: :meal}
@@ -25,6 +20,6 @@ class Oat < ActiveRecord::Base
   end
   # update on arbitrary block. example updates toast every time it's accessed if 
   # parent object was created on 8th day of the month
-  has_toast :special,      expire_if: -> (toast) { toast.parent.created_at.day == 8 }
+  has_toast :special, expire_if: -> (toast) { toast.parent.created_at.day == 8 }
 
 end

@@ -5,6 +5,8 @@ module Toastr
     self.table_name = :toastr_toasts
     belongs_to :parent, polymorphic: true
 
+    serialize :cache_json
+
     include AASM
 
     aasm column: :status do
