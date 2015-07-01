@@ -22,7 +22,8 @@ module Toastr
             toast.cache_json
           when :empty
             toast.queue!
-            options[:empty_cache_json] || { error: 'Data not yet available' }
+            toast.reload if Rails.application.config.active_job.queue_adapter == :inline
+            toast.cache_json || options[:empty_cache_json] || { error: 'Data not yet available' }
           when :queued
             toast.cache_json.present? ? toast.cache_json : (options[:empty_cache_json] || { error: 'Data not yet available' })
           end
