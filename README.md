@@ -1,8 +1,8 @@
-= Toastr
+# Toastr
 
 Acts like standard cache, but instead of blocking and recalculating, it serves stale data and kicks off a job to refresh it in the background.
 
-== INSTALLATION
+## INSTALLATION
 
 1. Install the gem
 
@@ -22,7 +22,7 @@ rails generate toastr:install
 rake db:migrate
 ```
 
-== USAGE
+## USAGE
 
 1. Define an instance method on an ActiveRecord.
 2. After defining the method, declare
@@ -71,11 +71,11 @@ end
 => {"oat"=>"meal", "toastr"=>{"elapsed"=>2.010508, "cached_at"=>"2015-06-09T16:14:25.701-07:00"}}
 ```
 
-== TODO
+## TODO
 * Extended test coverage
 * How to resolve conflicts between job_state and cache_state when errors occur
 
-== CHANGELOG
+## CHANGELOG
 * Installation generator
 * Basic test coverage
 * Adopt ActiveJob support instead of DJ
