@@ -15,7 +15,7 @@ class OatTest < ActiveSupport::TestCase
 
   test 'default toast responds with cache on first run if inline adapter' do
     Rails.application.config.active_job.queue_adapter = :inline
-    assert_equal :meal, @oat.breakfast[:oat]
+    assert_equal 'meal', @oat.breakfast['oat']
   end
 
   test 'default toast doesnt update toast if not stale' do
@@ -43,13 +43,13 @@ class OatTest < ActiveSupport::TestCase
 
   test 'expires_in toast responds with cache on first run if inline adapter' do
     Rails.application.config.active_job.queue_adapter = :inline
-    assert_equal :result, @oat.daily_report[:different]
+    assert_equal 'result', @oat.daily_report['different']
   end
 
   test 'expires_in toast doesnt update toast if not stale' do
     @oat.daily_report
     updated_at = @oat.toasts.last.updated_at
-    assert_equal :result, @oat.daily_report[:different]
+    assert_equal 'result', @oat.daily_report['different']
     assert_equal updated_at, @oat.toasts.last.reload.updated_at
   end
 
@@ -57,7 +57,7 @@ class OatTest < ActiveSupport::TestCase
     @oat.daily_report
     updated_at = @oat.toasts.last.updated_at
     @oat.toasts.last.update_column :updated_at, 2.days.ago # 1.day is the expiration
-    assert_equal :result, @oat.daily_report[:different]
+    assert_equal 'result', @oat.daily_report['different']
     assert_not_equal updated_at, @oat.toasts.last.reload.updated_at
   end
 
@@ -70,14 +70,14 @@ class OatTest < ActiveSupport::TestCase
 
   test 'arbitrary block toast responds with cache on first run if inline adapter' do
     Rails.application.config.active_job.queue_adapter = :inline
-    assert_equal :special, @oat.special[:very]
+    assert_equal 'special', @oat.special['very']
   end
 
   test 'arbitrary block toast doesnt update toast if not stale' do
     @oat.special
     @oat.update! created_at: '2015-01-01'
     updated_at = @oat.toasts.last.updated_at
-    assert_equal :special, @oat.special[:very]
+    assert_equal 'special', @oat.special['very']
     assert_equal updated_at, @oat.toasts.last.reload.updated_at
   end
 
@@ -85,7 +85,7 @@ class OatTest < ActiveSupport::TestCase
     @oat.special
     @oat.update! created_at: '2015-01-08'
     updated_at = @oat.toasts.last.updated_at
-    assert_equal :special, @oat.special[:very]
+    assert_equal 'special', @oat.special['very']
     assert_not_equal updated_at, @oat.toasts.last.reload.updated_at
   end
 end

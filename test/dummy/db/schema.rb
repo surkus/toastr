@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701004451) do
+ActiveRecord::Schema.define(version: 20150703022032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,13 +34,13 @@ ActiveRecord::Schema.define(version: 20150701004451) do
     t.integer  "parent_id",   null: false
     t.string   "parent_type", null: false
     t.string   "category",    null: false
-    t.text     "cache_json"
+    t.jsonb    "cache_json"
     t.text     "status",      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "toastr_toasts", ["parent_id", "parent_type", "category"], name: "toasts_parent_category", using: :btree
+  add_index "toastr_toasts", ["parent_id", "parent_type", "category"], name: "toasts_parent_category", unique: true, using: :btree
   add_index "toastr_toasts", ["parent_type", "parent_id"], name: "index_toastr_toasts_on_parent_type_and_parent_id", using: :btree
 
 end
