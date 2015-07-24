@@ -1,3 +1,5 @@
 database:
-  pre:
-    - cd test/dummy
+  override:
+    - cp config/database.yml.ci config/database.yml
+    - bundle exec rake db:create db:schema:load
+    pwd: test/dummy
