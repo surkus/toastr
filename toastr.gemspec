@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activejob'
   s.add_dependency 'pg'
 
+  s.required_ruby_version = '>= 2.0.0'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rails'
