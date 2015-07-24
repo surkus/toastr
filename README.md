@@ -57,7 +57,7 @@ class Oat < ActiveRecord::Base
   end
   # update on arbitrary block. example updates toast if any of its :related_records
   # have been updated since the toast was last updated
-  has_toast :special, expire_if: -> (toast) { toast.parent.related_records.pluck(:updated_at).max > toast.updated_at }
+  has_toast :special, expire_if: ->(toast) { toast.parent.related_records.pluck(:updated_at).max > toast.updated_at }
 
 end
 ```
