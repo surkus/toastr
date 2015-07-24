@@ -1,5 +1,8 @@
 database:
   override:
     - cp config/database.yml.ci config/database.yml
+      pwd:
+        test/dummy
     - bundle exec rake db:create db:schema:load
-    pwd: test/dummy
+      pwd:
+        test/dummy
