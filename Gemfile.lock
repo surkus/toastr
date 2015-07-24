@@ -108,5 +108,6 @@ PLATFORMS
 
 DEPENDENCIES
   rails
+  rake
   sqlite3
   toastr!
