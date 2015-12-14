@@ -95,7 +95,7 @@ class OatTest < ActiveSupport::TestCase
     4.times do
       Oat.create!
     end
-    assert_equal 5, Oat.count # plus one fixture
+    assert_equal 5, Oat.count # 4 plus one pre-existing fixture
 
     # build toasts
     Oat.all.each(&:daily_report)

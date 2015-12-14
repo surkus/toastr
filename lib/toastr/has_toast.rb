@@ -19,7 +19,11 @@ module Toastr
 
         define_method category do
           raise "Record must be persisted in database before calling method :#{category}" unless self.persisted?
-          toast = self.toasts.select{|t| t.category.to_s == category.to_s}.last || self.toasts.create(category: category)
+          toast = if self.toasts.loaded? # use loaded version to avoid n+1
+            self.toasts.detect{|t| t.category == category.to_s} || self.toasts.create(category: category)
+          else # query database
+            self.toasts.where(category: category).first_or_create
+          end
 
           case toast.status.to_sym
           when :cached
