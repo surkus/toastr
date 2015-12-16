@@ -3,22 +3,31 @@ module Toastr
     extend ActiveSupport::Concern
 
     module ClassMethods
+      HAS_TOAST_OPTIONS_WHITELIST = [:empty_cache_json, :expire_in, :expire_if]
       def has_toast(category, options = {})
         has_many :toasts, class_name: Toastr::Toast, as: :parent, dependent: :destroy
+
+        if (unrecognized_options = options.symbolize_keys!.keys - HAS_TOAST_OPTIONS_WHITELIST).any?
+          raise ArgumentError.new "Unrecognized option(s): #{unrecognized_options.collect{|o| ':' + o.to_s}.join(', ')}. Allowed options are #{HAS_TOAST_OPTIONS_WHITELIST.collect{|o| ':' + o.to_s}.join(', ')}"
+        end
 
         begin
           alias_method "#{category}_for_toastr", category
         rescue
-          raise ArgumentError.new "#{category} must be a defined instance method"
+          raise ArgumentError.new ":#{category} must be an already-defined instance method"
         end
 
         define_method category do
-          raise 'Gotta persist activerecord first' unless self.persisted?
-          toast = self.toasts.where(category: category).first_or_create
+          raise "Record must be persisted in database before calling method :#{category}" unless self.persisted?
+          toast = if self.toasts.loaded? # use loaded version to avoid n+1
+            self.toasts.detect{|t| t.category == category.to_s} || self.toasts.create(category: category)
+          else # query database
+            self.toasts.where(category: category).first_or_create
+          end
 
           case toast.status.to_sym
           when :cached
-            Toastr.queue_if_stale!(self, toast, options)
+            Toastr.queue_if_stale!(self, toast, options.slice(:expire_in, :expire_if))
             toast.cache_json
           when :empty
             toast.queue!
