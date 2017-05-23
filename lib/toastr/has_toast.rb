@@ -5,7 +5,7 @@ module Toastr
     module ClassMethods
       HAS_TOAST_OPTIONS_WHITELIST = [:empty_cache_json, :expire_in, :expire_if]
       def has_toast(category, options = {})
-        has_many :toasts, class_name: Toastr::Toast, as: :parent, dependent: :destroy
+        has_many :toasts, class_name: 'Toastr::Toast', as: :parent, dependent: :destroy
 
         if (unrecognized_options = options.symbolize_keys!.keys - HAS_TOAST_OPTIONS_WHITELIST).any?
           raise ArgumentError.new "Unrecognized option(s): #{unrecognized_options.collect{|o| ':' + o.to_s}.join(', ')}. Allowed options are #{HAS_TOAST_OPTIONS_WHITELIST.collect{|o| ':' + o.to_s}.join(', ')}"

@@ -1,7 +1,6 @@
 module Toastr
   class Job < ActiveJob::Base
-    def perform(*args) # expects toast object as single arg
-      toast = args.first
+    def perform(toast) # expects toast object as single arg
       result = nil
 
       elapsed = Benchmark.realtime { result = toast.parent.send("#{toast.category}_for_toastr") }
